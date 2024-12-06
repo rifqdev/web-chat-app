@@ -1,15 +1,51 @@
-import SplashScreen from "@/components/elements/splash-screen";
+"use client";
+import { useState } from "react";
+import MenuModalOrganism from "@/components/organisms/menu-modal";
+import AddFriendModalOrganism from "@/components/organisms/add-friend-modal";
+import ChatListTemplate from "@/components/templates/chatlist";
+import SettingsTemplate from "@/components/templates/settings";
+import ContactsTemplate from "@/components/templates/contacts";
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const [activeSidebar, setActiveSidebar] = useState("chatlist");
+  const [showAddFriendModal, setShowAddFriendModal] = useState(false);
+
+  const handleShowModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const handleActiveSidebar = (sidebar) => {
+    setActiveSidebar(sidebar);
+  };
+
+  const handleShowAddFriendModal = () => {
+    setShowAddFriendModal(!showAddFriendModal);
+  };
+
   return (
     <div className="grid grid-cols-12 h-screen">
-      <SplashScreen />
-      <div className="bg-blue-400 col-span-3 p-2">
-        <h1 className="text-black">Chat page kiri</h1>
+      {/* <SplashScreen /> */}
+      {activeSidebar === "chatlist" && <ChatListTemplate handleShowModal={handleShowModal} />}
+      {activeSidebar === "setting" && <SettingsTemplate handleActiveSidebar={handleActiveSidebar} />}
+      {activeSidebar === "contacts" && <ContactsTemplate handleActiveSidebar={handleActiveSidebar} />}
+      <div className="col-span-9 p-2">
+        <div className="h-full flex justify-center items-center">
+          <h1 className="text-slate-500 text-lg">Please select a chat to start messaging</h1>
+        </div>
       </div>
-      <div className="bg-red-400 col-span-9 p-2">
-        <h1 className="text-black">Chat page Kanan</h1>
-      </div>
+      {/* modal */}
+      {showModal && (
+        <MenuModalOrganism
+          handleActiveSidebar={handleActiveSidebar}
+          showModal={showModal}
+          handleShowModal={handleShowModal}
+          showAddFriendModal={showAddFriendModal}
+          handleShowAddFriendModal={handleShowAddFriendModal}
+        />
+      )}
+      {/* modal add friend */}
+      {showAddFriendModal && <AddFriendModalOrganism showModal={showAddFriendModal} handleShowModal={handleShowAddFriendModal} />}
     </div>
   );
 }
