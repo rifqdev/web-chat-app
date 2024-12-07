@@ -29,7 +29,10 @@ const mockData = [
   },
 ];
 
-const ChatListTemplate = ({ handleShowModal }) => {
+const ChatListTemplate = ({ handleShowModal, setSelectedChat }) => {
+  const handleSelectChat = (chat) => {
+    setSelectedChat(true);
+  };
   return (
     <div className="bg-white col-span-3 px-5">
       <div className="flex justify-between items-center mt-5">
@@ -46,6 +49,7 @@ const ChatListTemplate = ({ handleShowModal }) => {
           <div
             key={item.id}
             className="flex items-center gap-3 mt-3 cursor-pointer hover:bg-slate-100 hover:p-1 transition-all duration-300 ease-out"
+            onClick={() => handleSelectChat(item)}
           >
             <Image src={item.avatar} alt="avatar" width={40} height={40} />
             <div>

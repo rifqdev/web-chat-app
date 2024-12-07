@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+import Link from "next/link";
 const SettingsTemplate = ({ handleActiveSidebar }) => {
   return (
     <div className="bg-white col-span-3 p-5 overflow-y-auto pb-20">
@@ -39,6 +39,11 @@ const SettingsTemplate = ({ handleActiveSidebar }) => {
         <div className="flex gap-3 items-center mt-3">
           <Image src="/union.svg" alt="notification" width={20} height={20} />
           <p className="text-black cursor-pointer hover:underline text-lg">Notification</p>
+        </div>
+        <div className="mt-5">
+          <Link href="/auth/login" className="text-blue-sky cursor-pointer hover:underline text-lg">
+            Logout
+          </Link>
         </div>
       </div>
     </div>

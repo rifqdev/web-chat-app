@@ -5,11 +5,13 @@ import AddFriendModalOrganism from "@/components/organisms/add-friend-modal";
 import ChatListTemplate from "@/components/templates/chatlist";
 import SettingsTemplate from "@/components/templates/settings";
 import ContactsTemplate from "@/components/templates/contacts";
+import ChatTemplate from "@/components/templates/chat";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [activeSidebar, setActiveSidebar] = useState("chatlist");
   const [showAddFriendModal, setShowAddFriendModal] = useState(false);
+  const [selectedChat, setSelectedChat] = useState(null);
 
   const handleShowModal = () => {
     setShowModal(!showModal);
@@ -26,13 +28,17 @@ export default function Home() {
   return (
     <div className="grid grid-cols-12 h-screen">
       {/* <SplashScreen /> */}
-      {activeSidebar === "chatlist" && <ChatListTemplate handleShowModal={handleShowModal} />}
+      {activeSidebar === "chatlist" && <ChatListTemplate handleShowModal={handleShowModal} setSelectedChat={setSelectedChat} />}
       {activeSidebar === "setting" && <SettingsTemplate handleActiveSidebar={handleActiveSidebar} />}
       {activeSidebar === "contacts" && <ContactsTemplate handleActiveSidebar={handleActiveSidebar} />}
-      <div className="col-span-9 p-2">
-        <div className="h-full flex justify-center items-center">
-          <h1 className="text-slate-500 text-lg">Please select a chat to start messaging</h1>
-        </div>
+      <div className="col-span-9">
+        {selectedChat ? (
+          <ChatTemplate />
+        ) : (
+          <div className="h-full flex justify-center items-center">
+            <h1 className="text-slate-500 text-lg">Please select a chat to start messaging</h1>
+          </div>
+        )}
       </div>
       {/* modal */}
       {showModal && (
