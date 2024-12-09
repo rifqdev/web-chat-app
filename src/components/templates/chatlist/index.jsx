@@ -42,7 +42,7 @@ const ChatListTemplate = ({ handleShowModal, setSelectedChat }) => {
         </ButtonElement>
       </div>
       <div className="flex items-center mt-5 gap-3">
-        <InputElement className="border p-2 w-full rounded-lg" placeholder="Search" />
+        <InputElement className="border p-2 w-full rounded-lg text-black" placeholder="Search" />
       </div>
       <div className="mt-5">
         {mockData.map((item) => (

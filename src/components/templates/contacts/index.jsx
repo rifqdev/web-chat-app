@@ -54,7 +54,7 @@ const ContactsTemplate = ({ handleActiveSidebar }) => {
         <h1 className="text-blue-sky font-semibold text-xl flex-1 text-center">Contacts</h1>
       </div>
       <div className="flex items-center mt-5 gap-3">
-        <InputElement className="border p-2 w-full rounded-lg" placeholder="Search" />
+        <InputElement className="border p-2 w-full rounded-lg text-black" placeholder="Search" />
       </div>
       <div className="mt-8">
         {mockData.map((item) => (

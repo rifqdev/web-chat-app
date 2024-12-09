@@ -16,7 +16,7 @@ const AddFriendModalOrganism = ({ showModal, handleShowModal }) => {
   return (
     <ModalElement className="absolute top-1/2 left-1/2 rounded-lg p-5 w-1/5 bg-white border shadow-lg z-10">
       <h1 className="text-lg text-blue-sky text-center font-semibold">Add Friend</h1>
-      <InputElement className="border p-2 w-full rounded-lg" placeholder="Enter PIN" />
+      <InputElement className="border p-2 w-full rounded-lg text-black" placeholder="Enter PIN" />
       {mockData.length > 0 ? (
         mockData.map((item) => (
           <div
