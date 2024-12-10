@@ -1,6 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import NotificationSoundModalOrganism from "@/components/organisms/notification-sound-modal";
+
 const SettingsTemplate = ({ handleActiveSidebar }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => {
+    setShowModal(!showModal);
+  };
   return (
     <div className="bg-white col-span-3 p-5 overflow-y-auto pb-20">
       <div className="w-full flex items-center justify-between">
@@ -38,7 +46,9 @@ const SettingsTemplate = ({ handleActiveSidebar }) => {
         <h1 className="text-black font-semibold text-xl">Settings</h1>
         <div className="flex gap-3 items-center mt-3">
           <Image src="/union.svg" alt="notification" width={20} height={20} />
-          <p className="text-black cursor-pointer hover:underline text-lg">Notification</p>
+          <p className="text-black cursor-pointer hover:underline text-lg" onClick={handleShowModal}>
+            Notification
+          </p>
         </div>
         <div className="mt-5">
           <Link href="/auth/login" className="text-blue-sky cursor-pointer hover:underline text-lg">
@@ -46,6 +56,8 @@ const SettingsTemplate = ({ handleActiveSidebar }) => {
           </Link>
         </div>
       </div>
+      {/* modal select notification */}
+      <NotificationSoundModalOrganism showModal={showModal} handleShowModal={handleShowModal} />
     </div>
   );
 };
