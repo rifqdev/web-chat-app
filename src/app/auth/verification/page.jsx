@@ -16,6 +16,13 @@ const VerifyCodePage = () => {
               className="w-full p-2 border-b border-black focus:outline-none text-black font-bold"
               placeholder="Enter your code"
             />
+            <InputElement
+              label="New Password"
+              type="password"
+              id="new-password"
+              className="w-full p-2 border-b border-black focus:outline-none text-black font-bold"
+              placeholder="Enter your new password"
+            />
           </div>
           <ButtonElement className="w-full bg-blue-sky text-white p-2 rounded-full mt-8">Verify</ButtonElement>
         </form>
