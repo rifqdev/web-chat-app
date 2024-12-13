@@ -37,7 +37,7 @@ const RegisterPage = () => {
           <p className="mx-4 text-gray-500">Register with</p>
           <div className="flex-1 border-t border-gray-300"></div>
         </div>
-        <ButtonElement className="w-full border border-blue-sky text-blue-sky p-2 rounded-full">Google</ButtonElement>
+        {/* <ButtonElement className="w-full border border-blue-sky text-blue-sky p-2 rounded-full">Google</ButtonElement> */}
 
         <p className="text-center mt-8 text-black">
           Already have an account?{" "}
