@@ -30,7 +30,7 @@ export default function Home() {
       {/* <SplashScreen /> */}
       {activeSidebar === "chatlist" && <ChatListTemplate handleShowModal={handleShowModal} setSelectedChat={setSelectedChat} />}
       {activeSidebar === "setting" && <SettingsTemplate handleActiveSidebar={handleActiveSidebar} />}
-      {activeSidebar === "contacts" && <ContactsTemplate handleActiveSidebar={handleActiveSidebar} />}
+      {activeSidebar === "contacts" && <ContactsTemplate handleActiveSidebar={handleActiveSidebar} setSelectedChat={setSelectedChat} />}
       <div className="col-span-9">
         {selectedChat ? (
           <ChatTemplate />

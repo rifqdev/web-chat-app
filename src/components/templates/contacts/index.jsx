@@ -46,7 +46,7 @@ const mockData = [
   },
 ];
 
-const ContactsTemplate = ({ handleActiveSidebar }) => {
+const ContactsTemplate = ({ handleActiveSidebar, setSelectedChat }) => {
   return (
     <div className="bg-white col-span-3 p-5 overflow-y-auto pb-20">
       <div className="w-full flex items-center justify-between">
@@ -61,6 +61,7 @@ const ContactsTemplate = ({ handleActiveSidebar }) => {
           <div
             key={item.id}
             className="flex items-center gap-3 mt-3 cursor-pointer hover:bg-slate-100 hover:p-1 transition-all duration-300 ease-out"
+            onClick={() => setSelectedChat(true)}
           >
             <Image src={item.avatar} alt="avatar" width={40} height={40} />
             <div>
