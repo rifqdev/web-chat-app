@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import NotificationSoundModalOrganism from "@/components/organisms/notification-sound-modal";
+import { logout } from "@/utils/api";
 
 const SettingsTemplate = ({ handleActiveSidebar }) => {
   const [showModal, setShowModal] = useState(false);
@@ -50,7 +51,7 @@ const SettingsTemplate = ({ handleActiveSidebar }) => {
             Notification
           </p>
         </div>
-        <div className="mt-5">
+        <div className="mt-5" onClick={logout}>
           <Link href="/auth/login" className="text-blue-sky cursor-pointer hover:underline text-lg">
             Logout
           </Link>
