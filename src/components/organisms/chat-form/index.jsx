@@ -1,5 +1,9 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { io } from "socket.io-client";
+
+// Pastikan URL mengarah ke backend yang benar
+const socket = io("http://localhost:3001");
 
 const ChatFormOrganism = () => {
   const [textareaValue, setTextareaValue] = useState("");
@@ -13,6 +17,42 @@ const ChatFormOrganism = () => {
     setTextareaValue(e.target.value);
     adjustTextareaHeight(e.target);
   };
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to server with ID:", socket.id);
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("Connection error:", err);
+    });
+
+    socket.on("receive_message", (message) => {
+      console.log("New message:", message);
+    });
+
+    // Bersihkan listener saat komponen unmount
+    return () => {
+      socket.off("connect");
+      socket.off("connect_error");
+      socket.off("receive_message");
+    };
+  }, []);
+
+  const handleSendMessage = () => {
+    if (textareaValue.trim() !== "") {
+      const messageData = {
+        id: socket.id,
+        text: textareaValue,
+        timestamp: new Date(),
+        to: "user2",
+        sender: "user1",
+      };
+      socket.emit("send_message", messageData);
+      setTextareaValue("");
+    }
+  };
+
   return (
     <div className="bg-white py-4 flex justify-center relative">
       <textarea
@@ -27,8 +67,8 @@ const ChatFormOrganism = () => {
       <div className="absolute right-[98px] top-[26px]">
         <Image src="/emoji.svg" alt="emoji-icon" width={20} height={20} />
       </div>
-      <div className="absolute right-[65px] top-[26px]">
-        <Image src="/camera.svg" alt="camera.svg" width={20} height={20} />
+      <div className="absolute right-[65px] top-[26px]" onClick={handleSendMessage}>
+        <Image src="/send.svg" alt="send.svg" width={20} height={20} />
       </div>
     </div>
   );
