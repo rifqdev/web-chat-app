@@ -30,19 +30,20 @@ const ContactsTemplate = ({ handleActiveSidebar, setSelectedChat }) => {
         />
       </div>
       <div className="mt-8">
-        {friends.map((item) => (
-          <div
-            key={item.id}
-            className="flex items-center gap-3 mt-3 cursor-pointer hover:bg-slate-100 hover:p-1 transition-all duration-300 ease-out"
-            onClick={() => setSelectedChat(true)}
-          >
-            <Image src={item.avatar || "/Rectangle-8.svg"} alt="avatar" width={40} height={40} />
-            <div>
-              <h1 className="text-black font-semibold">{item.friend_fullname}</h1>
-              <p className="text-slate-500">{item.friend_username}</p>
+        {friends &&
+          friends.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center gap-3 mt-3 cursor-pointer hover:bg-slate-100 hover:p-1 transition-all duration-300 ease-out"
+              onClick={() => setSelectedChat(true)}
+            >
+              <Image src={item.avatar || "/Rectangle-8.svg"} alt="avatar" width={40} height={40} />
+              <div>
+                <h1 className="text-black font-semibold">{item.friend_fullname}</h1>
+                <p className="text-slate-500">{item.friend_username}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
