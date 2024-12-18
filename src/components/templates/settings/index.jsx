@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import NotificationSoundModalOrganism from "@/components/organisms/notification-sound-modal";
-import { logout, getProfile, updateUsername, updateBio, updateFullname } from "@/utils/api";
+import { logout, getProfile, updateUsername, updateBio, updateFullname, updatePhoto } from "@/utils/api";
 import InputElement from "@/components/elements/input";
 import ButtonElement from "@/components/elements/button";
+
 const SettingsTemplate = ({ handleActiveSidebar }) => {
   const [showModal, setShowModal] = useState(false);
   const [profile, setProfile] = useState(null);
@@ -15,6 +16,9 @@ const SettingsTemplate = ({ handleActiveSidebar }) => {
   const [bio, setBio] = useState("");
   const [showInputFullname, setShowInputFullname] = useState(false);
   const [fullname, setFullname] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [showButtonUpdatePhoto, setShowButtonUpdatePhoto] = useState(false);
+  const [previewPhoto, setPreviewPhoto] = useState("");
 
   const handleShowModal = () => {
     setShowModal(!showModal);
@@ -69,6 +73,40 @@ const SettingsTemplate = ({ handleActiveSidebar }) => {
     setLoading(false);
   };
 
+  const fileInputRef = useRef(null);
+  const handleOpenFile = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // Trigger click pada input file
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPhoto(file);
+      setPreviewPhoto(URL.createObjectURL(file));
+      setShowButtonUpdatePhoto(true);
+    }
+  };
+
+  const handleCancelUpdatePhoto = () => {
+    setShowButtonUpdatePhoto(false);
+    setPreviewPhoto("");
+  };
+
+  const handleUpdatePhoto = async () => {
+    setLoading(true);
+    if (photo === "") {
+      alert("Photo is required");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("photo", photo);
+    const response = await updatePhoto(formData);
+    setShowButtonUpdatePhoto(false);
+    setLoading(false);
+  };
+
   return (
     <div className="bg-white col-span-3 p-5 overflow-y-auto pb-20">
       <div className="w-full flex items-center justify-between">
@@ -76,8 +114,24 @@ const SettingsTemplate = ({ handleActiveSidebar }) => {
         <h1 className="text-blue-sky font-semibold text-xl flex-1 text-center">{profile?.username ? `@${profile?.username}` : "Username"}</h1>
       </div>
       <div className="mt-8 flex flex-col items-center justify-center">
-        <div>
-          <Image src="/Rectangle-8.svg" alt="avatar" width={100} height={100} />
+        <div className="bg-gray-200 rounded-full p-1 w-20 h-20 cursor-pointer">
+          <Image
+            src={previewPhoto ? previewPhoto : profile?.photo ? profile?.photo : "/Rectangle-8.svg"}
+            className="rounded-full w-full h-full object-cover"
+            alt="avatar"
+            width={50}
+            height={50}
+            onClick={handleOpenFile}
+          />
+          <input type="file" className="hidden" ref={fileInputRef} onChange={handleFileChange} />
+          <div className={`${showButtonUpdatePhoto ? "block" : "hidden"} flex gap-2 items-center justify-between`}>
+            <p className=" text-red-500 text-xl" onClick={handleCancelUpdatePhoto}>
+              x
+            </p>
+            <p className=" text-green-500 text-xl" onClick={handleUpdatePhoto}>
+              ✓
+            </p>
+          </div>
         </div>
         <div className="text-center mt-5">
           <h1 className={`text-black font-semibold text-xl ${showInputFullname ? "hidden" : "block"}`} onClick={handleShowInputFullname}>

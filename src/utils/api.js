@@ -193,3 +193,12 @@ export const updateFullname = async (data) => {
     return error.response.data;
   }
 };
+
+export const updatePhoto = async (data) => {
+  try {
+    const response = await api.put("user/update-profile-picture", data);
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
