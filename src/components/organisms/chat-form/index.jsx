@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 // Pastikan URL mengarah ke backend yang benar
 const socket = io("http://localhost:3001");
 
-const ChatFormOrganism = () => {
+const ChatFormOrganism = ({ friend, sendMessage, setSendMessage }) => {
   const [textareaValue, setTextareaValue] = useState("");
 
   const adjustTextareaHeight = (element) => {
@@ -27,7 +27,7 @@ const ChatFormOrganism = () => {
       console.error("Connection error:", err);
     });
 
-    socket.on("receive_message", (message) => {
+    socket.on(`message_${friend.user_id}`, (message) => {
       console.log("New message:", message);
     });
 
@@ -35,7 +35,7 @@ const ChatFormOrganism = () => {
     return () => {
       socket.off("connect");
       socket.off("connect_error");
-      socket.off("receive_message");
+      socket.off(`message_${friend.user_id}`);
     };
   }, []);
 
@@ -45,10 +45,11 @@ const ChatFormOrganism = () => {
         id: socket.id,
         text: textareaValue,
         timestamp: new Date(),
-        to: "user2",
-        sender: "user1",
+        to: friend.friend_id,
+        sender: friend.user_id,
       };
       socket.emit("send_message", messageData);
+      setSendMessage(messageData);
       setTextareaValue("");
     }
   };

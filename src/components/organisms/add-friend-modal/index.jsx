@@ -37,7 +37,9 @@ const AddFriendModalOrganism = ({ showModal, handleShowModal }) => {
           className="flex items-center gap-3 mt-3 cursor-pointer hover:bg-slate-100 hover:bg-opacity-50 transition-all duration-300 ease-out"
           onClick={() => handleAddFriend(friend.pin)}
         >
-          <Image src={friend.avatar || "/Rectangle-8.svg"} alt="avatar" width={40} height={40} />
+          <div className="w-10 h-10 rounded-full overflow-hidden">
+            <Image src={friend.photo || "/Rectangle-8.svg"} alt="avatar" width={40} height={40} />
+          </div>
           <div>
             <h1 className="text-black font-semibold">{friend.fullname}</h1>
           </div>

@@ -60,7 +60,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         console.error("Failed to refresh token:", refreshError);
         sessionStorage.removeItem("access_token");
-        window.location.href = "/login"; // Redirect ke login jika refresh token gagal
+        window.location.href = "auth/login"; // Redirect ke login jika refresh token gagal
       }
     }
 

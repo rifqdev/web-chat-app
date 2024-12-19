@@ -33,7 +33,7 @@ export default function Home() {
       {activeSidebar === "contacts" && <ContactsTemplate handleActiveSidebar={handleActiveSidebar} setSelectedChat={setSelectedChat} />}
       <div className="col-span-9">
         {selectedChat ? (
-          <ChatTemplate />
+          <ChatTemplate friend={selectedChat} />
         ) : (
           <div className="h-full flex justify-center items-center">
             <h1 className="text-slate-500 text-lg">Please select a chat to start messaging</h1>

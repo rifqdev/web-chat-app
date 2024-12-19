@@ -15,6 +15,11 @@ const ContactsTemplate = ({ handleActiveSidebar, setSelectedChat }) => {
     fetchFriends();
   }, [search]);
 
+  const handleSelectChat = (friend) => {
+    // localStorage.setItem("selectedChat", JSON.stringify(friend));
+    setSelectedChat(friend);
+  };
+
   return (
     <div className="bg-white col-span-3 p-5 overflow-y-auto pb-20">
       <div className="w-full flex items-center justify-between">
@@ -35,12 +40,14 @@ const ContactsTemplate = ({ handleActiveSidebar, setSelectedChat }) => {
             <div
               key={item.id}
               className="flex items-center gap-3 mt-3 cursor-pointer hover:bg-slate-100 hover:p-1 transition-all duration-300 ease-out"
-              onClick={() => setSelectedChat(true)}
+              onClick={() => handleSelectChat(item)}
             >
-              <Image src={item.avatar || "/Rectangle-8.svg"} alt="avatar" width={40} height={40} />
+              <div className="w-10 h-10 rounded-full overflow-hidden">
+                <Image src={item.friend_photo || "/Rectangle-8.svg"} alt="avatar" width={40} height={40} />
+              </div>
               <div>
                 <h1 className="text-black font-semibold">{item.friend_fullname}</h1>
-                <p className="text-slate-500">{item.friend_username}</p>
+                <p className="text-slate-500 text-sm">{item.friend_username ? `@${item.friend_username}` : ""}</p>
               </div>
             </div>
           ))}

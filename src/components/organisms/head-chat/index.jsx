@@ -2,7 +2,7 @@ import Image from "next/image";
 import ModalElement from "@/components/elements/modal";
 import { useState } from "react";
 
-const HeadChatOrganism = ({ chat }) => {
+const HeadChatOrganism = ({ friend }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => {
@@ -12,11 +12,11 @@ const HeadChatOrganism = ({ chat }) => {
   return (
     <div className="flex justify-between items-center bg-white px-4 py-2">
       <div className="flex items-center gap-3">
-        <div>
-          <Image src="/Rectangle-8.svg" alt="avatar" width={40} height={40} />
+        <div className="w-10 h-10 rounded-full overflow-hidden">
+          <Image src={friend.friend_photo || "/Rectangle-8.svg"} alt="avatar" width={40} height={40} />
         </div>
         <div>
-          <p className="font-bold text-black text-lg">Jhonson</p>
+          <p className="font-bold text-black text-lg">{friend.friend_fullname}</p>
           <p className="text-slate-500 text-sm">Online</p>
         </div>
       </div>
