@@ -43,7 +43,7 @@ const ChatFormOrganism = ({ friend, sendMessage, setSendMessage }) => {
     if (textareaValue.trim() !== "") {
       const messageData = {
         id: socket.id,
-        text: textareaValue,
+        message: textareaValue,
         timestamp: new Date(),
         to: friend.friend_id,
         sender: friend.user_id,
