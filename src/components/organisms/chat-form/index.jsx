@@ -28,7 +28,7 @@ const ChatFormOrganism = ({ friend, sendMessage, setSendMessage }) => {
     });
 
     socket.on(`message_${friend.user_id}`, (message) => {
-      console.log("New message:", message);
+      setSendMessage((prevMsg) => [...prevMsg, message]);
     });
 
     // Bersihkan listener saat komponen unmount
@@ -49,7 +49,7 @@ const ChatFormOrganism = ({ friend, sendMessage, setSendMessage }) => {
         sender: friend.user_id,
       };
       socket.emit("send_message", messageData);
-      setSendMessage(messageData);
+      setSendMessage((prevMsg) => [...prevMsg, messageData]);
       setTextareaValue("");
     }
   };

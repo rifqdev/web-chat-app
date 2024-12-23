@@ -4,13 +4,12 @@ import ChatFormOrganism from "@/components/organisms/chat-form";
 import { useState } from "react";
 
 const ChatTemplate = ({ friend }) => {
-  const [sendMessage, setSendMessage] = useState("");
+  const [sendMessage, setSendMessage] = useState([]);
 
-  console.log(sendMessage);
   return (
     <div className="flex flex-col h-screen">
       <HeadChatOrganism friend={friend} />
-      <ChatContentOrganism />
+      <ChatContentOrganism sendMessage={sendMessage} />
       <ChatFormOrganism friend={friend} sendMessage={sendMessage} setSendMessage={setSendMessage} />
     </div>
   );

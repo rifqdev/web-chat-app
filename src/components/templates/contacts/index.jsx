@@ -16,7 +16,7 @@ const ContactsTemplate = ({ handleActiveSidebar, setSelectedChat }) => {
   }, [search]);
 
   const handleSelectChat = (friend) => {
-    // localStorage.setItem("selectedChat", JSON.stringify(friend));
+    localStorage.setItem("user_id", friend.user_id);
     setSelectedChat(friend);
   };
 

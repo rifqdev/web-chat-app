@@ -58,7 +58,6 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest); // Ulangi request sebelumnya
       } catch (refreshError) {
-        console.error("Failed to refresh token:", refreshError);
         sessionStorage.removeItem("access_token");
         window.location.href = "auth/login"; // Redirect ke login jika refresh token gagal
       }
