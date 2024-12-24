@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import InputElement from "@/components/elements/input";
-import { getFriends } from "@/utils/api";
+import { getFriends, getChat } from "@/utils/api";
 import { useEffect, useState } from "react";
+import { useChatStore } from "@/store/store";
 
 const ContactsTemplate = ({ handleActiveSidebar, setSelectedChat }) => {
   const [search, setSearch] = useState("");
@@ -18,6 +19,12 @@ const ContactsTemplate = ({ handleActiveSidebar, setSelectedChat }) => {
   const handleSelectChat = (friend) => {
     localStorage.setItem("user_id", friend.user_id);
     setSelectedChat(friend);
+
+    const fetchChat = async () => {
+      const response = await getChat(friend.friend_id);
+      useChatStore.setState({ chat: response.data });
+    };
+    fetchChat();
   };
 
   return (

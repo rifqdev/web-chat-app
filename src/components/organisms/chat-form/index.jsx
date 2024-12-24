@@ -1,13 +1,16 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
+import { useChatStore } from "@/store/store";
 
 // Pastikan URL mengarah ke backend yang benar
 const socket = io("http://localhost:3001");
 
-const ChatFormOrganism = ({ friend, sendMessage, setSendMessage }) => {
+const ChatFormOrganism = ({ friend }) => {
   const [textareaValue, setTextareaValue] = useState("");
 
+  const chat = useChatStore((state) => state.chat);
+  console.log("chat", chat);
   const adjustTextareaHeight = (element) => {
     element.style.height = "48px"; // Reset height
     element.style.height = element.scrollHeight + "px";
@@ -28,7 +31,7 @@ const ChatFormOrganism = ({ friend, sendMessage, setSendMessage }) => {
     });
 
     socket.on(`message_${friend.user_id}`, (message) => {
-      setSendMessage((prevMsg) => [...prevMsg, message]);
+      useChatStore.setState((state) => ({ chat: [...state.chat, message] }));
     });
 
     // Bersihkan listener saat komponen unmount
@@ -49,7 +52,7 @@ const ChatFormOrganism = ({ friend, sendMessage, setSendMessage }) => {
         sender: friend.user_id,
       };
       socket.emit("send_message", messageData);
-      setSendMessage((prevMsg) => [...prevMsg, messageData]);
+      useChatStore.setState({ chat: [...chat, messageData] });
       setTextareaValue("");
     }
   };

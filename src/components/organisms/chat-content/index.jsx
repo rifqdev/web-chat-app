@@ -1,10 +1,25 @@
-const ChatContentOrganism = ({ sendMessage }) => {
+import { useEffect, useRef } from "react";
+import { useChatStore } from "@/store/store";
+
+const ChatContentOrganism = () => {
   const userId = localStorage.getItem("user_id");
+  const chat = useChatStore((state) => state.chat);
+
+  const chatContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [chat]);
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-2">
-      {sendMessage.length > 0 ? (
-        sendMessage.map((message, index) => {
+    <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-2">
+      {chat.length > 0 ? (
+        chat.map((message, index) => {
           if (userId === message.sender) {
             return (
               <div key={index} className="flex justify-end mt-3">

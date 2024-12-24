@@ -201,3 +201,13 @@ export const updatePhoto = async (data) => {
     return error.response.data;
   }
 };
+
+// chat api
+export const getChat = async (id) => {
+  try {
+    const response = await api.get(`chats/history/${id}`);
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
