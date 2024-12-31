@@ -80,6 +80,7 @@ export const login = async (data) => {
   try {
     const response = await api.post("auth/login", data);
     sessionStorage.setItem("access_token", response.data.data.accessToken);
+    localStorage.setItem("user_id", response.data.data.userId);
     return response.data;
   } catch (error) {
     return error.response.data;
@@ -126,6 +127,7 @@ export const resendForgotPassword = async (data) => {
 
 export const logout = async () => {
   sessionStorage.removeItem("access_token");
+  localStorage.removeItem("user_id");
 };
 
 // friends api
@@ -206,6 +208,15 @@ export const updatePhoto = async (data) => {
 export const getChat = async (id) => {
   try {
     const response = await api.get(`chats/history/${id}`);
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const getFriendChats = async () => {
+  try {
+    const response = await api.get(`/chats/friend`);
     return response.data;
   } catch (error) {
     return error.response.data;

@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MenuModalOrganism from "@/components/organisms/menu-modal";
 import AddFriendModalOrganism from "@/components/organisms/add-friend-modal";
 import ChatListTemplate from "@/components/templates/chatlist";
 import SettingsTemplate from "@/components/templates/settings";
 import ContactsTemplate from "@/components/templates/contacts";
 import ChatTemplate from "@/components/templates/chat";
+import { getFriendChats } from "@/utils/api";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -25,10 +26,24 @@ export default function Home() {
     setShowAddFriendModal(!showAddFriendModal);
   };
 
+  const [listFriends, setListFriends] = useState([]);
+
+  useEffect(() => {
+    const fetchChatsFriends = async () => {
+      const response = await getFriendChats();
+      setListFriends(response.data);
+    };
+    if (activeSidebar === "chatlist") {
+      fetchChatsFriends();
+    }
+  }, [activeSidebar]);
+  // console.log(listFriends);
   return (
     <div className="grid grid-cols-12 h-screen">
       {/* <SplashScreen /> */}
-      {activeSidebar === "chatlist" && <ChatListTemplate handleShowModal={handleShowModal} setSelectedChat={setSelectedChat} />}
+      {activeSidebar === "chatlist" && (
+        <ChatListTemplate handleShowModal={handleShowModal} setSelectedChat={setSelectedChat} listFriends={listFriends} />
+      )}
       {activeSidebar === "setting" && <SettingsTemplate handleActiveSidebar={handleActiveSidebar} />}
       {activeSidebar === "contacts" && <ContactsTemplate handleActiveSidebar={handleActiveSidebar} setSelectedChat={setSelectedChat} />}
       <div className="col-span-9">

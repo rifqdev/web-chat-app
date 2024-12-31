@@ -10,7 +10,6 @@ const ChatFormOrganism = ({ friend }) => {
   const [textareaValue, setTextareaValue] = useState("");
 
   const chat = useChatStore((state) => state.chat);
-  console.log("chat", chat);
   const adjustTextareaHeight = (element) => {
     element.style.height = "48px"; // Reset height
     element.style.height = element.scrollHeight + "px";
@@ -47,7 +46,7 @@ const ChatFormOrganism = ({ friend }) => {
       const messageData = {
         id: socket.id,
         message: textareaValue,
-        timestamp: new Date(),
+        createdAt: new Date(),
         to: friend.friend_id,
         sender: friend.user_id,
       };
