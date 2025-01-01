@@ -222,3 +222,12 @@ export const getFriendChats = async () => {
     return error.response.data;
   }
 };
+
+export const markAsRead = async (data) => {
+  try {
+    const response = await api.post("chats/read", data);
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
