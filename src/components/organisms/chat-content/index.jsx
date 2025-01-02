@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { useChatStore } from "@/store/store";
 import { formatDistance } from "date-fns";
 import { id as localeId } from "date-fns/locale";
@@ -7,23 +7,28 @@ import { markAsRead } from "@/utils/api";
 const ChatContentOrganism = () => {
   const userId = localStorage.getItem("user_id");
   const chat = useChatStore((state) => state.chat);
+  const friendId = useChatStore((state) => state.chatId);
+
   const [chatIds, setChatIds] = useState([]);
   const chatContainerRef = useRef(null);
-  const audioRef = useRef(null);
-
   const [isVisible, setIsVisible] = useState(false);
-  const [soundSrc, setSoundSrc] = useState("");
 
+  // Filter chat yang relevan
+  const filteredChat = useMemo(
+    () =>
+      chat.filter(
+        (message) => message.sender === userId || message.receiver === friendId || message.sender === friendId || message.receiver === userId
+      ),
+    [chat, userId, friendId]
+  );
+
+  // Menandai pesan yang belum terbaca
   useEffect(() => {
-    const markAsReadChat = chat.filter((message) => message.is_read === false);
+    const markAsReadChat = filteredChat.filter((message) => !message.is_read);
     setChatIds(markAsReadChat.map((message) => message.id));
-  }, [chat]);
+  }, [filteredChat]);
 
-  useEffect(() => {
-    const sound = localStorage.getItem("sound") || "/notification/software-interface-start.wav";
-    setSoundSrc(sound);
-  }, []);
-
+  // Scroll ke bawah secara otomatis ketika ada pesan baru
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo({
@@ -31,13 +36,9 @@ const ChatContentOrganism = () => {
         behavior: "smooth",
       });
     }
+  }, [filteredChat]);
 
-    if (audioRef.current && soundSrc) {
-      audioRef.current.src = soundSrc;
-      audioRef.current.play().catch((error) => console.error("Audio playback failed:", error));
-    }
-  }, [chat, soundSrc]);
-
+  // Menggunakan IntersectionObserver untuk memeriksa apakah target terlihat
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -57,17 +58,17 @@ const ChatContentOrganism = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Tandai pesan sebagai sudah dibaca ketika terlihat
   useEffect(() => {
-    if (isVisible) {
+    if (isVisible && chatIds.length > 0) {
       markAsRead({ ids: chatIds });
     }
-  }, [isVisible]);
+  }, [isVisible, chatIds]);
 
   return (
     <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-2">
-      <audio ref={audioRef} />
-      {chat.length > 0 ? (
-        chat.map((message, index) => (
+      {filteredChat.length > 0 ? (
+        filteredChat.map((message, index) => (
           <div key={index} className={`flex ${userId === message.sender ? "justify-end" : "justify-start"} mt-3`}>
             <div>
               <p

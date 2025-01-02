@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MenuModalOrganism from "@/components/organisms/menu-modal";
 import AddFriendModalOrganism from "@/components/organisms/add-friend-modal";
 import ChatListTemplate from "@/components/templates/chatlist";
@@ -7,8 +7,11 @@ import SettingsTemplate from "@/components/templates/settings";
 import ContactsTemplate from "@/components/templates/contacts";
 import ChatTemplate from "@/components/templates/chat";
 import { getFriendChats } from "@/utils/api";
+import { useChatStore } from "@/store/store";
 
 export default function Home() {
+  const chat = useChatStore((state) => state.chat);
+
   const [showModal, setShowModal] = useState(false);
   const [activeSidebar, setActiveSidebar] = useState("chatlist");
   const [showAddFriendModal, setShowAddFriendModal] = useState(false);
@@ -36,8 +39,8 @@ export default function Home() {
     if (activeSidebar === "chatlist") {
       fetchChatsFriends();
     }
-  }, [activeSidebar]);
-  // console.log(listFriends);
+  }, [activeSidebar, chat]);
+
   return (
     <div className="grid grid-cols-12 h-screen">
       {/* <SplashScreen /> */}

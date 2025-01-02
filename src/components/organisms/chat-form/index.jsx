@@ -1,13 +1,17 @@
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useChatStore } from "@/store/store";
 
 // Pastikan URL mengarah ke backend yang benar
 const socket = io("http://localhost:3001");
 
+const defaultSound = "/notification/software-interface-start.wav";
+
 const ChatFormOrganism = ({ friend }) => {
   const [textareaValue, setTextareaValue] = useState("");
+
+  const soundSrc = localStorage.getItem("sound") || defaultSound;
 
   const chat = useChatStore((state) => state.chat);
   const adjustTextareaHeight = (element) => {
@@ -20,6 +24,9 @@ const ChatFormOrganism = ({ friend }) => {
     adjustTextareaHeight(e.target);
   };
 
+  const chatContainerRef = useRef(null);
+  const audioRef = useRef(null);
+
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Connected to server with ID:", socket.id);
@@ -30,6 +37,17 @@ const ChatFormOrganism = ({ friend }) => {
     });
 
     socket.on(`message_${friend.user_id}`, (message) => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTo({
+          top: chatContainerRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+
+      if (audioRef.current && soundSrc) {
+        audioRef.current.src = soundSrc;
+        audioRef.current.play().catch((error) => console.error("Audio playback failed:", error));
+      }
       useChatStore.setState((state) => ({ chat: [...state.chat, message] }));
     });
 
@@ -57,7 +75,8 @@ const ChatFormOrganism = ({ friend }) => {
   };
 
   return (
-    <div className="bg-white py-4 flex justify-center relative">
+    <div ref={chatContainerRef} className="bg-white py-4 flex justify-center relative">
+      <audio ref={audioRef} />
       <textarea
         placeholder="Type a message"
         className="w-11/12 p-2 rounded-lg focus:outline-none bg-gray-100 text-black pr-32 overflow-y-auto resize-none max-h-36 min-h-12"

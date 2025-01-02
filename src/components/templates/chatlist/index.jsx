@@ -5,19 +5,13 @@ import { formatDistance } from "date-fns";
 import { eoLocale } from "date-fns/locale/id";
 import { getChat } from "@/utils/api";
 import { useChatStore } from "@/store/store";
-import { useState, useEffect } from "react";
 
 const ChatListTemplate = ({ handleShowModal, setSelectedChat, listFriends }) => {
-  const chat = useChatStore((state) => state.chat);
-
-  const [lastMessages, setLastMessages] = useState({});
-  const [friendId, setFriendId] = useState(null);
   const userId = localStorage.getItem("user_id");
 
   const uniqueFriends = [];
   const seenFriends = new Set();
 
-  // Membuat daftar teman unik
   listFriends &&
     listFriends.forEach((item) => {
       const friendId = item.friendInfo.id === userId ? item.userInfo.id : item.friendInfo.id;
@@ -31,8 +25,6 @@ const ChatListTemplate = ({ handleShowModal, setSelectedChat, listFriends }) => 
   const handleSelectChat = async (friend) => {
     const isFriendSender = userId === friend.sender;
     const selectedFriendId = isFriendSender ? friend.friendInfo.id : friend.sender;
-
-    setFriendId(selectedFriendId);
 
     const friendData = {
       user_id: userId,
@@ -51,17 +43,9 @@ const ChatListTemplate = ({ handleShowModal, setSelectedChat, listFriends }) => 
 
     // Simpan chat ke state global
     useChatStore.setState({ chat: response.data });
+    useChatStore.setState({ chatId: friendData.friend_id });
   };
 
-  useEffect(() => {
-    if (friendId && chat.length > 0) {
-      const latestMessage = chat[chat.length - 1]?.message || "No message yet";
-      setLastMessages((prev) => ({
-        ...prev,
-        [friendId]: latestMessage,
-      }));
-    }
-  }, [friendId, chat]);
   return (
     <div className="bg-white col-span-3 px-5">
       <div className="flex justify-between items-center mt-5">
@@ -76,7 +60,6 @@ const ChatListTemplate = ({ handleShowModal, setSelectedChat, listFriends }) => 
       <div className="mt-5">
         {uniqueFriends.map((item, index) => {
           const isCurrentUserSender = item.friendInfo.id === userId;
-          const friendId = isCurrentUserSender ? item.userInfo.id : item.friendInfo.id;
 
           return (
             <div
@@ -95,7 +78,7 @@ const ChatListTemplate = ({ handleShowModal, setSelectedChat, listFriends }) => 
                 </div>
                 <div>
                   <h1 className="text-black font-semibold">{isCurrentUserSender ? item.userInfo.fullname : item.friendInfo.fullname}</h1>
-                  <p className="text-slate-500">{lastMessages[friendId] || item.last_message}</p>
+                  <p className="text-slate-500">{item.last_message}</p>
                 </div>
               </div>
               <div className="flex flex-col items-end text-sm gap-1">
